@@ -32,43 +32,47 @@ def verify_password(password: str, hashed: str) -> bool:
     return hash_password(password) == hashed
 
 def get_db_connection():
-    use_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
-    db_host = os.getenv("DB_HOST", "")
+    use_sqlite = os.getenv("USE_SQLITE", "").lower()
     
-    # 默认使用 SQLite，除非明确设置 USE_SQLITE=false
-    if not use_sqlite and db_host:
-        # 只有明确指定 DB_HOST 且 USE_SQLITE=false 才使用 MySQL
-        db_port = os.getenv("DB_PORT", "3306")
-        return pymysql.connect(
-            host=db_host,
-            port=int(db_port),
-            user=os.getenv("DB_USER", "root"),
-            password=os.getenv("DB_PASSWORD", "genai123"),
-            database=os.getenv("DB_NAME", "tianji"),
-            cursorclass=pymysql.cursors.DictCursor,
-            autocommit=True
-        )
+    # 只有明确设置 USE_SQLITE=false 才使用 MySQL
+    if use_sqlite == "false":
+        db_host = os.getenv("DB_HOST", "")
+        if db_host:
+            db_port = os.getenv("DB_PORT", "3306")
+            return pymysql.connect(
+                host=db_host,
+                port=int(db_port),
+                user=os.getenv("DB_USER", "root"),
+                password=os.getenv("DB_PASSWORD", "genai123"),
+                database=os.getenv("DB_NAME", "tianji"),
+                cursorclass=pymysql.cursors.DictCursor,
+                autocommit=True
+            )
     
-    # 使用 SQLite
+    # 默认使用 SQLite
     import sqlite3
     conn = sqlite3.connect('tianji.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 def get_cursor(conn):
-    is_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
-    if is_sqlite:
+    use_sqlite = os.getenv("USE_SQLITE", "").lower()
+    if use_sqlite != "false":
         return conn.cursor()
     return conn.cursor()
 
 def init_db():
     conn = get_db_connection()
-    if conn is None:
+    use_sqlite = os.getenv("USE_SQLITE", "").lower()
+    
+    # 如果是 MySQL 模式且无数据库连接则跳过
+    if use_sqlite == "false" and conn is None:
         print("本地MySQL未连接，跳过数据库初始化")
         return
     try:
         cursor = get_cursor(conn)
-        is_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
+        is_sqlite = os.getenv("USE_SQLITE", "").lower() != "false"
+        
         if is_sqlite:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS users (
