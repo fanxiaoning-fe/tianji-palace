@@ -35,22 +35,25 @@ def get_db_connection():
     use_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
     db_host = os.getenv("DB_HOST", "")
     
-    if use_sqlite or not db_host:
-        import sqlite3
-        conn = sqlite3.connect('tianji.db')
-        conn.row_factory = sqlite3.Row
-        return conn
+    # 默认使用 SQLite，除非明确设置 USE_SQLITE=false
+    if not use_sqlite and db_host:
+        # 只有明确指定 DB_HOST 且 USE_SQLITE=false 才使用 MySQL
+        db_port = os.getenv("DB_PORT", "3306")
+        return pymysql.connect(
+            host=db_host,
+            port=int(db_port),
+            user=os.getenv("DB_USER", "root"),
+            password=os.getenv("DB_PASSWORD", "genai123"),
+            database=os.getenv("DB_NAME", "tianji"),
+            cursorclass=pymysql.cursors.DictCursor,
+            autocommit=True
+        )
     
-    db_port = os.getenv("DB_PORT", "3306")
-    return pymysql.connect(
-        host=db_host,
-        port=int(db_port),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "genai123"),
-        database=os.getenv("DB_NAME", "tianji"),
-        cursorclass=pymysql.cursors.DictCursor,
-        autocommit=True
-    )
+    # 使用 SQLite
+    import sqlite3
+    conn = sqlite3.connect('tianji.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def get_cursor(conn):
     is_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
