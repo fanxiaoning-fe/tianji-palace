@@ -32,17 +32,16 @@ def verify_password(password: str, hashed: str) -> bool:
     return hash_password(password) == hashed
 
 def get_db_connection():
-    db_host = os.getenv("DB_HOST", "127.0.0.1")
-    db_port = os.getenv("DB_PORT", "3306")
+    use_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
+    db_host = os.getenv("DB_HOST", "")
     
-    if USE_SQLITE:
+    if use_sqlite or not db_host:
         import sqlite3
         conn = sqlite3.connect('tianji.db')
         conn.row_factory = sqlite3.Row
         return conn
     
-    if not db_host:
-        return None
+    db_port = os.getenv("DB_PORT", "3306")
     return pymysql.connect(
         host=db_host,
         port=int(db_port),
