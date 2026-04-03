@@ -53,7 +53,8 @@ def get_db_connection():
     )
 
 def get_cursor(conn):
-    if USE_SQLITE:
+    is_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
+    if is_sqlite:
         return conn.cursor()
     return conn.cursor()
 
@@ -64,7 +65,8 @@ def init_db():
         return
     try:
         cursor = get_cursor(conn)
-        if USE_SQLITE:
+        is_sqlite = os.getenv("USE_SQLITE", "").lower() == "true"
+        if is_sqlite:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
