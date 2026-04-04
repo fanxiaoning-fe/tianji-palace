@@ -1,5 +1,5 @@
-import type { Metadata } from 'next'
 import '../styles/globals.css'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: '天机阁 - AI占卜平台',
@@ -13,9 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body className="min-h-screen bg-slate-900 star-bg">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

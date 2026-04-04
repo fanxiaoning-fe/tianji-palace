@@ -8,12 +8,7 @@ import { ArrowLeft, User, Lock, Mail, Phone, Sparkles, Loader2 } from 'lucide-re
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState({
-    username: '',
-    phone: '',
-    email: '',
-    password: ''
-  })
+  const [formData, setFormData] = useState({ username: '', phone: '', email: '', password: '' })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -59,140 +54,70 @@ export default function AuthPage() {
   }
 
   return (
-    <main className="min-h-screen pt-20 pb-12 px-4">
+    <main className="min-h-screen bg-[#ffffff] pt-20 pb-12 px-4">
       <div className="max-w-md mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-card rounded-3xl p-8"
-        >
-          <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card p-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 mb-8 transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span>返回首页</span>
           </Link>
 
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-white">
-              {isLogin ? '登录' : '注册'}
-            </h1>
-            <p className="text-gray-400 mt-2">
-              {isLogin ? '欢迎回到天机阁' : '创建账号，开始你的占卜之旅'}
-            </p>
+            <h1 className="text-3xl font-bold text-slate-900">{isLogin ? '登录' : '注册'}</h1>
+            <p className="text-slate-500 mt-2">{isLogin ? '欢迎回到天机阁' : '创建账号，开始你的占卜之旅'}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">用户名</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">用户名</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                  <input
-                    type="text"
-                    value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    placeholder="请输入用户名"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} placeholder="请输入用户名" className="input-field pl-10" />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                {isLogin ? '用户名 / 手机号 / 邮箱' : '手机号'}
-              </label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">{isLogin ? '用户名 / 手机号 / 邮箱' : '手机号'}</label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                <input
-                  type="text"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder={isLogin ? "请输入用户名、手机号或邮箱" : "请输入手机号"}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input type="text" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder={isLogin ? "请输入用户名、手机号或邮箱" : "请输入手机号"} className="input-field pl-10" />
               </div>
             </div>
 
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">邮箱（可选）</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">邮箱（可选）</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="请输入邮箱（可选）"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="请输入邮箱（可选）" className="input-field pl-10" />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">密码</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">密码</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="请输入密码"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  required
-                />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder="请输入密码" className="input-field pl-10" required />
               </div>
             </div>
 
-            {error && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-400 text-sm text-center"
-              >
-                {error}
-              </motion.p>
-            )}
+            {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-sm text-center">{error}</motion.p>}
+            {success && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-green-500 text-sm text-center">{success}</motion.p>}
 
-            {success && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-green-400 text-sm text-center"
-              >
-                {success}
-              </motion.p>
-            )}
-
-            <motion.button
-              type="submit"
-              disabled={loading}
-              className="w-full btn-mystic py-4 rounded-xl text-white font-bold text-lg flex items-center justify-center gap-2 disabled:opacity-50"
-              whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>处理中...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  <span>{isLogin ? '登录' : '注册'}</span>
-                </>
-              )}
+            <motion.button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2" whileHover={{ scale: loading ? 1 : 1.02 }} whileTap={{ scale: loading ? 1 : 0.98 }}>
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+              <span>{isLogin ? '登录' : '注册'}</span>
             </motion.button>
           </form>
 
           <div className="mt-6 text-center">
-            <button
-              onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess('') }}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
+            <button onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess('') }} className="text-slate-500 hover:text-indigo-600 transition-colors">
               {isLogin ? '没有账号？点击注册' : '已有账号？点击登录'}
             </button>
           </div>

@@ -3,149 +3,188 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Sparkles, Star, Moon, Sun, Heart, Briefcase, Wallet, User, Sparkle } from 'lucide-react'
+import { Sparkles, Star, Moon, Sun, Heart, Sparkle, ArrowRight, User, Menu, X } from 'lucide-react'
 
 const divinationTypes = [
-  { id: 'tarot', name: '塔罗占卜', icon: Moon, description: '78张塔罗牌，解读过去现在未来', color: 'from-purple-500 to-pink-500' },
-  { id: 'liuqiao', name: '六爻占卜', icon: Sparkles, description: '易经64卦，洞悉事物发展变化', color: 'from-blue-500 to-cyan-500' },
-  { id: 'bazi', name: '生辰八字', icon: Star, description: '四柱五行，解读命理格局', color: 'from-yellow-500 to-orange-500' },
-  { id: 'ziwei', name: '紫微斗数', icon: Sparkle, description: '十二宫位，星曜组合分析', color: 'from-indigo-500 to-purple-500' },
-  { id: 'dream', name: '周公解梦', icon: Moon, description: '解读梦境，预知未来运势', color: 'from-teal-500 to-green-500' },
-  { id: 'fortune', name: '每日运势', icon: Sun, description: '星座运势，把握今日机遇', color: 'from-amber-500 to-yellow-500' },
-  { id: 'compatibility', name: '命理合盘', icon: Heart, description: '八字合盘，解析双方缘分', color: 'from-rose-500 to-pink-500' },
+  { id: 'tarot', name: '塔罗占卜', icon: Moon, description: '78张韦特塔罗牌，解读过去现在未来', gradient: 'from-purple-500 to-pink-500' },
+  { id: 'liuqiao', name: '六爻占卜', icon: Sparkles, description: '易经64卦，洞悉事物发展变化', gradient: 'from-blue-500 to-cyan-500' },
+  { id: 'bazi', name: '生辰八字', icon: Star, description: '四柱五行，解读命理格局', gradient: 'from-yellow-500 to-orange-500' },
+  { id: 'ziwei', name: '紫微斗数', icon: Sparkle, description: '十二宫位，星曜组合分析', gradient: 'from-indigo-500 to-purple-500' },
+  { id: 'dream', name: '周公解梦', icon: Moon, description: '解读梦境，预知未来运势', gradient: 'from-teal-500 to-green-500' },
+  { id: 'fortune', name: '每日运势', icon: Sun, description: '星座运势，把握今日机遇', gradient: 'from-amber-500 to-yellow-500' },
+  { id: 'compatibility', name: '命理合盘', icon: Heart, description: '八字合盘，解析双方缘分', gradient: 'from-rose-500 to-pink-500' },
 ]
 
 const features = [
-  { icon: Star, title: 'AI智能解读', desc: 'GPT-4深度学习模型' },
-  { icon: Sparkles, title: '实时分析', desc: '秒级响应，即时反馈' },
+  { icon: Sparkles, title: 'AI智能解读', desc: 'DeepSeek大模型，智能分析' },
+  { icon: Star, title: '实时分析', desc: '秒级响应，即时反馈' },
   { icon: Moon, title: '多维分析', desc: '事业财运爱情健康' },
 ]
 
 export default function Home() {
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <main className="min-h-screen">
-      <nav className="fixed top-0 left-0 right-0 z-50 glass">
+    <main className="min-h-screen bg-[#ffffff]">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 nav-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <motion.div 
-              className="flex items-center gap-2"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              <Sparkles className="w-8 h-8 text-purple-400" />
-              <span className="text-xl font-bold text-gradient">天机阁</span>
-            </motion.div>
-            <div className="flex items-center gap-4">
-              <Link href="/divination" className="text-gray-300 hover:text-white transition-colors">
+            <Link href="/" className="flex items-center gap-2">
+              <Sparkles className="w-8 h-8 text-indigo-600" />
+              <span className="text-xl font-bold text-slate-900">天机阁</span>
+            </Link>
+            
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="/divination" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
                 占卜入口
               </Link>
-              <Link href="/profile" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+              <Link href="/auth" className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-medium transition-colors">
                 <User className="w-5 h-5" />
-                <span>我的</span>
+                <span>登录</span>
+              </Link>
+              <Link href="/divination" className="btn-primary">
+                开始占卜
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
+
+          {/* Mobile Nav */}
+          {menuOpen && (
+            <div className="md:hidden py-4 border-t border-slate-200">
+              <Link href="/divination" className="block py-2 text-slate-600">占卜入口</Link>
+              <Link href="/auth" className="block py-2 text-slate-600">登录</Link>
+              <Link href="/divination" className="block py-2 text-indigo-600 font-medium">开始占卜</Link>
+            </div>
+          )}
         </div>
       </nav>
 
+      {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-center"
           >
+            <div className="inline-flex items-center gap-2 badge mb-6">
+              <Sparkles className="w-4 h-4" />
+              <span>AI智能占卜平台</span>
+            </div>
+            
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="text-gradient">探索你的命运</span>
+              <span className="hero-gradient">探索你的命运</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+            
+            <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10">
               融合东方命理与西方占卜，AI智能解读你的人生轨迹
             </p>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              {features.map((feature, index) => (
+
+            <div className="flex flex-wrap justify-center gap-4 mb-16">
+              {features.map((item, idx) => (
                 <motion.div
-                  key={feature.title}
-                  className="glass-card rounded-xl px-6 py-3 flex items-center gap-3"
+                  key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="feature-card flex items-center gap-3"
                 >
-                  <feature.icon className="w-5 h-5 text-purple-400" />
+                  <item.icon className="w-5 h-5 text-indigo-600" />
                   <div>
-                    <p className="font-medium text-white">{feature.title}</p>
-                    <p className="text-sm text-gray-400">{feature.desc}</p>
+                    <p className="font-semibold text-slate-900">{item.title}</p>
+                    <p className="text-sm text-slate-500">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
 
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            {divinationTypes.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <Link href={`/divination/${item.id}`}>
-                  <motion.div
-                    className={`glass-card rounded-2xl p-6 cursor-pointer h-full hover:scale-105 transition-transform`}
-                    onMouseEnter={() => setHoveredCard(item.id)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
-                      <item.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">{item.name}</h3>
-                    <p className="text-gray-400 text-sm">{item.description}</p>
-                  </motion.div>
-                </Link>
-              </motion.div>
-            ))}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="/divination" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+                开始占卜
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="/auth" className="btn-secondary inline-flex items-center gap-2 text-lg px-8 py-4">
+                登录账号
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
 
+      {/* Divination Types */}
+      <section className="py-20 px-4 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              选择你的占卜方式
+            </h2>
+            <p className="text-slate-500 max-w-xl mx-auto">
+              多种占卜方式，融合东方命理与西方占卜，为你揭示命运奥秘
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {divinationTypes.map((item, idx) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <Link href={`/divination/${item.id}`}>
+                  <div className="type-card h-full">
+                    <div className={`icon bg-gradient-to-br ${item.gradient}`}>
+                      <item.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">{item.name}</h3>
+                    <p className="text-slate-500 text-sm">{item.description}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
       <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            className="glass-card rounded-3xl p-12"
-            initial={{ opacity: 0, scale: 0.9 }}
+        <div className="max-w-4xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
+            className="card p-12 text-center"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">准备好探索你的命运了吗？</h2>
-            <p className="text-gray-300 mb-8">立即开始你的占卜之旅，获得AI智能指引</p>
-            <Link href="/divination">
-              <motion.button
-                className="btn-mystic px-8 py-4 rounded-xl text-white font-bold text-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                开始占卜
-              </motion.button>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              准备好探索你的命运了吗？
+            </h2>
+            <p className="text-slate-500 mb-8">
+              立即开始你的占卜之旅，获得AI智能指引
+            </p>
+            <Link href="/divination" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+              开始占卜
+              <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
         </div>
       </section>
 
-      <footer className="py-8 px-4 border-t border-white/10">
-        <div className="max-w-7xl mx-auto text-center text-gray-500">
+      {/* Footer */}
+      <footer className="py-8 px-4 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto text-center text-slate-400">
           <p>© 2024 天机阁. AI占卜平台，仅供娱乐参考</p>
         </div>
       </footer>
